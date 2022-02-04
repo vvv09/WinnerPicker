@@ -52,6 +52,10 @@
         label="Start again"
       />
     </div>
+    <audio
+      v-if="showWinnerScreen"
+      autoplay
+      src="drumroll.mp3"></audio>
   </q-page>
 </template>
 
@@ -91,23 +95,25 @@
       },
       animateNames() {
         let counter = 0
-        animateNamesInterval = setInterval(() => {
-          this.currentName = ''
-          if (counter == this.namesArray.length - 1) {
-            counter = 0
-          } else {
-            counter++
-          }
-          setTimeout(() => { // чтобы имена мерцали
-            this.currentName = this.namesArray[counter]
-          }, 100)
-        }, 200)
+        setTimeout(() => {
+          animateNamesInterval = setInterval(() => {
+            this.currentName = ''
+            if (counter == this.namesArray.length - 1) {
+              counter = 0
+            } else {
+              counter++
+            }
+            setTimeout(() => {
+              this.currentName = this.namesArray[counter]
+            }, 100) // задержка, чтобы имена мерцали
+          }, 200)
+        }, 700) // задержка, чтобы успевало запусткаться аудио
       },
       stopAnimatingNames() {
         setTimeout(() => {
           clearInterval(animateNamesInterval)
           this.pickedWinner = true
-        }, 4000);
+        }, 8500); // задержк пудобрать по таймеру аудиофайла, чтобы остновка совпала с крэшем
       },
       startAgain() {
         this.pickedWinner = false
