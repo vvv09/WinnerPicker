@@ -35,15 +35,19 @@
       <h1
         v-if="pickedWinner"
         class="deep-shadow text-white absolute-top text-center text-bold">WINNER!!!</h1>
-      <q-card
-        v-if="currentName"
-        dark
-        bordered
-        :class="pickedWinner ? 'bg-green-7' : 'bg-primary'">
-        <q-card-section>
-          <div class="text-h6">{{ currentName }}</div>
-        </q-card-section>
-      </q-card>
+      <div
+        :class="{ 'zoom' : zoomingNames }"
+        class="name-card">
+        <q-card
+          v-if="currentName"
+          dark
+          bordered
+          :class="pickedWinner ? 'bg-green-7' : 'bg-primary'">
+          <q-card-section>
+            <div class="text-h6">{{ currentName }}</div>
+          </q-card-section>
+        </q-card>
+      </div>
       <q-btn
         v-if="pickedWinner"
         color="primary"
@@ -70,6 +74,7 @@
         namesArray: [],
         currentName: '',
         pickedWinner: false,
+        zoomingNames: false,
       }
     },
     methods: {
@@ -78,6 +83,7 @@
         this.initNamesArray()
         this.animateNames()
         this.stopAnimatingNames()
+        this.zoomNames()
       },
       initNamesArray() {
         this.namesArray = this.namesText.split('\n')
@@ -115,8 +121,14 @@
           this.pickedWinner = true
         }, 8500); // задержк пудобрать по таймеру аудиофайла, чтобы остновка совпала с крэшем
       },
+      zoomNames() {
+        setTimeout(() => {
+          this.zoomingNames = true
+        }, 1000)
+      },
       startAgain() {
         this.pickedWinner = false
+        this.zoomingNames = false
         this.showWinnerScreen = false
         this.currentName = ''
       }
@@ -163,6 +175,19 @@
 
   .winner-screen {
     z-index: 4;
+    .name-card {
+      transform: scale(0.5);
+      transition: transform 8.5s linear; /* см выше 8500 */
+      &.zoom {
+        transform: scale(3);
+      }
+      .q-card {
+        box-shadow:
+          0 0 15px 7.5px #fff,
+          0 0 25px 15px #f0f,
+          0 0 35px 22.5px #0ff;
+      }
+    }
 
     .start-again {
       bottom: 20px;
