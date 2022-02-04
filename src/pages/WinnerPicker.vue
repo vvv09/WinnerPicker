@@ -8,13 +8,13 @@
       v-if="!showWinnerScreen"
       class="add-names column bg-red">
       <q-card-section>
-        <h2 class="deep-shadow text-center q-mt-none q-mb-md text-white text-bold">WINNER PICKER</h2>
+        <h2 class="deep-shadow text-center q-mt-none q-mb-md text-white text-bold">ВЫБИРАТОР</h2>
         <q-input
           v-model="namesText"
           filled
           type="textarea"
           bg-color="white"
-          placeholder="Enter names on separate lines."
+          placeholder="Перечислите варианты через Enter."
           rows="10"
           cols="40"
         />
@@ -22,7 +22,7 @@
           <q-btn
             @click="pickWinner"
             :disable="!namesText"
-            label="Pick a Winner!"
+            label="Совершить выбор!"
             color="primary"
             size="xl"
           />
@@ -34,7 +34,7 @@
       class="winner-screen">
       <h1
         v-if="pickedWinner"
-        class="deep-shadow text-white absolute-top text-center text-bold">WINNER!!!</h1>
+        class="deep-shadow text-white absolute-top text-center text-bold">ВЫБРАНО!!!</h1>
       <div
         :class="{ 'zoom' : zoomingNames }"
         class="name-card">
@@ -53,7 +53,7 @@
         color="primary"
         @click="startAgain"
         class="start-again absolute"
-        label="Start again"
+        label="Новый выбор"
       />
     </div>
     <audio
