@@ -32,16 +32,20 @@
     <div
       v-else
       class="winner-screen">
-      <h1 class="deep-shadow text-white absolute-top text-center text-bold">WINNER!!!</h1>
+      <h1
+        v-if="pickedWinner"
+        class="deep-shadow text-white absolute-top text-center text-bold">WINNER!!!</h1>
       <q-card
+        v-if="currentName"
         dark
         bordered
-        class="bg-primary">
+        :class="pickedWinner ? 'bg-green-7' : 'bg-primary'">
         <q-card-section>
-          <div class="text-h6">John Connor</div>
+          <div class="text-h6">{{ currentName }}</div>
         </q-card-section>
       </q-card>
       <q-btn
+        v-if="pickedWinner"
         color="primary"
         @click="startAgain"
         class="start-again absolute"
@@ -52,25 +56,31 @@
 </template>
 
 <script>
+  let animateNamesInterval
+
   export default {
     data() {
       return {
         showWinnerScreen: false,
         namesText: '',
         namesArray: [],
+        currentName: '',
+        pickedWinner: false,
       }
     },
     methods: {
       pickWinner() {
         this.showWinnerScreen = true
-        this.initNamesArray();
+        this.initNamesArray()
+        this.animateNames()
+        this.stopAnimatingNames()
       },
       initNamesArray() {
         this.namesArray = this.namesText.split('\n')
         this.namesArray = this.shuffle(this.namesArray)
       },
       shuffle(a) {
-        var j, x, i;
+        let j, x, i;
         for (i = a.length - 1; i > 0; i--) {
           j = Math.floor(Math.random() * (i + 1));
           x = a[i];
@@ -79,8 +89,30 @@
         }
         return a;
       },
+      animateNames() {
+        let counter = 0
+        animateNamesInterval = setInterval(() => {
+          this.currentName = ''
+          if (counter == this.namesArray.length - 1) {
+            counter = 0
+          } else {
+            counter++
+          }
+          setTimeout(() => { // чтобы имена мерцали
+            this.currentName = this.namesArray[counter]
+          }, 100)
+        }, 200)
+      },
+      stopAnimatingNames() {
+        setTimeout(() => {
+          clearInterval(animateNamesInterval)
+          this.pickedWinner = true
+        }, 4000);
+      },
       startAgain() {
+        this.pickedWinner = false
         this.showWinnerScreen = false
+        this.currentName = ''
       }
     }
   }
